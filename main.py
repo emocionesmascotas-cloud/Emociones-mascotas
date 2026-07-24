@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from pathlib import Path
 from app.core.config import settings
 from app.core.database import engine, Base
@@ -22,19 +21,18 @@ app = FastAPI(
 BASE_DIR = Path(__file__).resolve().parent
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 
-# Templates
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
-
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    html_path = BASE_DIR / "templates" / "index.html"
+    return FileResponse(html_path)
 
 @app.get("/dashboard", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    return templates.TemplateResponse("dashboard.html", {"request": request})
+    html_path = BASE_DIR / "templates" / "index.html"
+    return FileResponse(html_path)
 
 @app.get("/api/health")
 async def health_check():
