@@ -8,6 +8,7 @@ from app.services.emocion_service import EmocionService
 router = APIRouter(prefix="/emociones", tags=["Emociones"])
 
 @router.get("/", response_model=List[EmocionResponse])
+@router.get("", response_model=List[EmocionResponse])
 def get_emociones(
     mascota_id: Optional[int] = Query(None),
     skip: int = 0,

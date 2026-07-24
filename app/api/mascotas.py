@@ -8,6 +8,7 @@ from app.services.mascota_service import MascotaService
 router = APIRouter(prefix="/mascotas", tags=["Mascotas"])
 
 @router.get("/", response_model=List[MascotaListResponse])
+@router.get("", response_model=List[MascotaListResponse])
 def get_mascotas(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return MascotaService.get_all(db, skip, limit)
 
