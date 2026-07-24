@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+__pycache__
 *.so
 .Python
 build/
@@ -28,7 +29,9 @@ venv.bak/
 *.db
 *.sqlite
 *.sqlite3
-data/
+data/*.db
+data/*.sqlite
+data/*.sqlite3
 .idea/
 .vscode/
 *.log
