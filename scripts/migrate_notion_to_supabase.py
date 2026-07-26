@@ -177,7 +177,7 @@ def get_supabase_client():
     
     url = os.environ.get("SUPABASE_URL")
     anon_key = os.environ.get("SUPABASE_ANON_KEY")
-    service_key = os.environ.get("SUPABASE_SERVICE_KEY")
+    service_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")  # Usar service role key
     
     if not url or not anon_key:
         raise EnvironmentError("SUPABASE_URL y SUPABASE_ANON_KEY son requeridos")

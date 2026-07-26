@@ -125,7 +125,7 @@ class SupabaseClient:
         return SupabaseConfig(
             url=get_env_or_raise("SUPABASE_URL", "URL del proyecto Supabase"),
             anon_key=get_env_or_raise("SUPABASE_ANON_KEY", "Clave pública anon"),
-            service_key=os.environ.get("SUPABASE_SERVICE_KEY"),  # Opcional
+            service_key=os.environ.get("SUPABASE_SERVICE_ROLE_KEY"),  # Opcional - para bypass RLS
             schema=os.environ.get("SUPABASE_SCHEMA", "public")
         )
     
