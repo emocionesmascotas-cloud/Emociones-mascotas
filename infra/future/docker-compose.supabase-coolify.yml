@@ -1,0 +1,203 @@
+# =============================================================================
+# docker-compose.yml - Supabase Self-Hosted + Coolify
+# =============================================================================
+# 
+# ESTE ARCHIVO ES PARA FASE 2 (cuando tengas presupuesto)
+# 
+# Uso futuro:
+#   docker-compose -f docker-compose.supabase-coolify.yml up -d
+#
+# O desplegar en Coolify como Application + Docker Compose
+#
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ==========================================================================
+  # SUPABASE STACK
+  # ==========================================================================
+  
+  db:
+    image: supabase/postgres:15.1.0.147
+    container_name: emociones_mascotas_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-your-super-secret-password}
+      POSTGRES_DB: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./supabase/migrations/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - supabase_network
+
+  kong:
+    image: kong:2.8.1
+    container_name: emociones_mascotas_kong
+    restart: unless-stopped
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
+      KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_PLUGINS: request-transformer,cors,key-auth,acl
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    volumes:
+      - ./config/kong.yml:/var/lib/kong/kong.yml:ro
+    ports:
+      - "8000:8000"     # HTTP
+      - "8443:8443"     # HTTPS
+      - "8001:8001"     # Admin API
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - supabase_network
+
+  auth:
+    image: supabase/gotrue:v2.99.0
+    container_name: emociones_mascotas_auth
+    restart: unless-stopped
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-your-super-secret-password}@db:5432/postgres?search_path=auth
+      GOTRUE_SITE_URL: ${SITE_URL:-http://localhost:3000}
+      GOTRUE_URI_ALLOW_LIST: '*'
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_JWT_ADMIN_ROLES: service_role
+      GOTRUE_JWT_AUD: authenticated
+      GOTRUE_JWT_DEFAULT_GROUP_NAME: authenticated
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-with-at-least-32-characters}
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    depends_on:
+      - db
+    networks:
+      - supabase_network
+
+  storage:
+    image: supabase/storage-api:v0.40.4
+    container_name: emociones_mascotas_storage
+    restart: unless-stopped
+    environment:
+      ANON_KEY: ${SUPABASE_ANON_KEY}
+      SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      POSTGREST_URL: http://rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-with-at-least-32-characters}
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-your-super-secret-password}@db:5432/postgres
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+      TENANT_ID: stub
+      REGION: stub
+      GLOBAL_S3_BUCKET: stub
+    volumes:
+      - storage_data:/var/lib/storage
+    depends_on:
+      - db
+      - rest
+    networks:
+      - supabase_network
+
+  rest:
+    image: postgrest/postgrest:v11.2.0
+    container_name: emociones_mascotas_rest
+    restart: unless-stopped
+    environment:
+      PGRST_DB_URI: postgres://postgres:${POSTGRES_PASSWORD:-your-super-secret-password}@db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET:-your-jwt-secret-with-at-least-32-characters}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+    depends_on:
+      - db
+    networks:
+      - supabase_network
+
+  # ==========================================================================
+  # APLICACIÓN PRINCIPAL
+  # ==========================================================================
+  
+  emociones_api:
+    build:
+      context: ../..
+      dockerfile: infra/future/Dockerfile.app
+    container_name: emociones_mascotas_api
+    restart: unless-stopped
+    environment:
+      # Supabase
+      SUPABASE_URL: http://kong:8000
+      SUPABASE_ANON_KEY: ${SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_KEY: ${SUPABASE_SERVICE_KEY}
+      # Database
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:-your-super-secret-password}@db:5432/postgres
+      # Notion (opcional)
+      NOTION_INTEGRATION_KEY: ${NOTION_INTEGRATION_KEY:-}
+      NOTION_DATABASE_ID: ${NOTION_DATABASE_ID:-}
+      # Telegram (opcional)
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      # Webhooks
+      PIPEDREAM_WEBHOOK_SECRET: ${PIPEDREAM_WEBHOOK_SECRET:-}
+      # App
+      DEBUG: "false"
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - kong
+    networks:
+      - supabase_network
+
+  # ==========================================================================
+  # NGINX (Proxy Reverso)
+  # ==========================================================================
+  
+  nginx:
+    image: nginx:alpine
+    container_name: emociones_mascotas_nginx
+    restart: unless-stopped
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx.d:/etc/nginx/conf.d:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - emociones_api
+    networks:
+      - supabase_network
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+
+volumes:
+  db_data:
+    driver: local
+  storage_data:
+    driver: local
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+
+networks:
+  supabase_network:
+    driver: bridge
