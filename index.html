@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emociones Mascotas</title>
+    <link rel="stylesheet" href="./static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><span>🐾</span> Emociones Mascotas</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('mascotas')">🐶 Mascotas</button>
+                <button class="nav-tab" onclick="showSection('emociones')">💭 Emociones</button>
+                <button class="nav-tab" onclick="showSection('estadisticas')">📊 Estadísticas</button>
+            </nav>
+        </header>
+
+        <!-- Sección Mascotas -->
+        <section id="section-mascotas" class="fade-in">
+            <div class="grid-2 mb-3">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-mascotas">0</div>
+                    <div class="stat-label">Total de Mascotas</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #00cec9 0%, #0984e3 100%);">
+                    <div class="stat-value" id="total-emociones">0</div>
+                    <div class="stat-label">Emociones Registradas</div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="card-title">🐾 Mis Mascotas</h2>
+                    <button class="btn btn-primary" onclick="openMascotaModal()">
+                        ➕ Nueva Mascota
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search-mascotas" placeholder="Buscar mascotas..." oninput="filtrarMascotas()">
+                </div>
+                <div class="table-container">
+                    <table id="mascotas-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Especie</th>
+                                <th>Raza</th>
+                                <th>Emociones</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mascotas-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="mascotas-empty" style="display: none;">
+                    <span>🐾</span>
+                    <h3>No tienes mascotas registradas</h3>
+                    <p>¡Comienza agregando a tu primera mascota!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Emociones -->
+        <section id="section-emociones" class="fade-in" style="display: none;">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="card-title">💭 Registrar Nueva Emoción</h2>
+                </div>
+                <form id="emocion-form" onsubmit="registrarEmocion(event)">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="emocion-mascota">Mascota</label>
+                            <select class="form-control" id="emocion-mascota" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="emocion-tipo">Tipo de Emoción</label>
+                            <select class="form-control" id="emocion-tipo" required>
+                                <option value="">Selecciona una emoción</option>
+                                <option value="feliz">😊 Feliz</option>
+                                <option value="triste">😢 Triste</option>
+                                <option value="ansioso">😰 Ansioso</option>
+                                <option value="tranquilo">😌 Tranquilo</option>
+                                <option value="juguetón">🎾 Juguetón</option>
+                                <option value="asustado">😨 Asustado</option>
+                                <option value="enfermizo">🤒 Enfermizo</option>
+                                <option value="cansado">😴 Cansado</option>
+                                <option value="excitado">🤩 Excitado</option>
+                                <option value="confundido">😕 Confundido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="emocion-intensidad">Intensidad (1-5)</label>
+                            <div class="intensidad-indicator" id="intensidad-selector">
+                                <div class="intensidad-dot active" data-value="1"></div>
+                                <div class="intensidad-dot active" data-value="2"></div>
+                                <div class="intensidad-dot" data-value="3"></div>
+                                <div class="intensidad-dot" data-value="4"></div>
+                                <div class="intensidad-dot" data-value="5"></div>
+                            </div>
+                            <input type="hidden" id="emocion-intensidad" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="emocion-contexto">Contexto</label>
+                            <select class="form-control" id="emocion-contexto">
+                                <option value="">Selecciona contexto</option>
+                                <option value="comida">🍖 Comida</option>
+                                <option value="paseo">🚶 Paseo</option>
+                                <option value="juego">🎾 Juego</option>
+                                <option value="descanso">😴 Descanso</option>
+                                <option value="visita_veterinario">🏥 Visita al Veterinario</option>
+                                <option value="socializacion">🐕 Socialización</option>
+                                <option value="sin_motivo_aparente">❓ Sin motivo aparente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="emocion-descripcion">Descripción (opcional)</label>
+                        <textarea class="form-control" id="emocion-descripcion" rows="3" placeholder="Describe cómo se comporta tu mascota..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Registrar Emoción</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📝 Historial de Emociones</h2>
+                    <div class="flex gap-1">
+                        <select class="form-control" id="filtro-mascota" onchange="cargarEmociones()">
+                            <option value="">Todas las mascotas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search-emociones" placeholder="Buscar en historial..." oninput="filtrarEmociones()">
+                </div>
+                <div class="table-container">
+                    <table id="emociones-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Mascota</th>
+                                <th>Emoción</th>
+                                <th>Intensidad</th>
+                                <th>Contexto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emociones-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="emociones-empty" style="display: none;">
+                    <span>💭</span>
+                    <h3>No hay emociones registradas</h3>
+                    <p>¡Registra la primera emoción de tu mascota!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Estadísticas -->
+        <section id="section-estadisticas" class="fade-in" style="display: none;">
+            <div class="grid-2 mb-3">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total-emociones">0</div>
+                    <div class="stat-label">Total de Emociones</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">
+                    <div class="stat-value" id="stat-emocion-frecuente">-</div>
+                    <div class="stat-label">Emoción Más Frecuente</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📊 Distribución de Emociones</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chart-emociones"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📈 Emociones Promedio</h2>
+                    </div>
+                    <div id="stats-list"></div>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">🐾 Emociones por Mascota</h2>
+                    <select class="form-control" id="stats-mascota-select" onchange="cargarStatsMascota()">
+                        <option value="">Selecciona una mascota</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-mascota"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal Mascota -->
+    <div class="modal-overlay" id="mascota-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="mascota-modal-title">🐾 Nueva Mascota</h3>
+                <button class="modal-close" onclick="closeMascotaModal()">&times;</button>
+            </div>
+            <form id="mascota-form" onsubmit="guardarMascota(event)">
+                <input type="hidden" id="mascota-id">
+                <div class="form-group">
+                    <label for="mascota-nombre">Nombre *</label>
+                    <input type="text" class="form-control" id="mascota-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="mascota-especie">Especie *</label>
+                    <select class="form-control" id="mascota-especie" required>
+                        <option value="">Selecciona especie</option>
+                        <option value="perro">🐕 Perro</option>
+                        <option value="gato">🐈 Gato</option>
+                        <option value="ave">🐦 Ave</option>
+                        <option value="conejo">🐰 Conejo</option>
+                        <option value="hamster">🐹 Hámster</option>
+                        <option value="pez">🐟 Pez</option>
+                        <option value="reptil">🦎 Reptil</option>
+                        <option value="otro">🐾 Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="mascota-raza">Raza</label>
+                    <input type="text" class="form-control" id="mascota-raza" placeholder="Ej: Golden Retriever">
+                </div>
+                <div class="form-group">
+                    <label for="mascota-fecha">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="mascota-fecha">
+                </div>
+                <div class="form-group">
+                    <label for="mascota-notas">Notas</label>
+                    <textarea class="form-control" id="mascota-notas" rows="3" placeholder="Notas sobre tu mascota..."></textarea>
+                </div>
+                <div class="flex gap-1 justify-between">
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteMascota()">🗑️ Eliminar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="./static/js/app.js"></script>
+</body>
+</html>
