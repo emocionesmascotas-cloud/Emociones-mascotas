@@ -3,333 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emociones Mascotas - Descubre qué siente tu mejor amigo</title>
-    <meta name="description" content="¿Qué es lo que realmente siente tu mascota? Aprende a descifrar el mundo emocional de tu compañero peludo.">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary: #6C5CE7;
-            --primary-dark: #5B4CC4;
-            --secondary: #00CEC9;
-            --accent: #FD79A8;
-            --bg-dark: #1A1A2E;
-            --bg-card: #16213E;
-            --text: #F8F9FA;
-            --text-muted: #A0A0B0;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, #0F0F1A 100%);
-            color: var(--text);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-
-        .hero { text-align: center; padding: 4rem 0; }
-
-        .hero-emoji {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
-
-        .hero-question {
-            font-size: 1.5rem;
-            color: var(--accent);
-            font-weight: 700;
-            margin: 2rem 0;
-            padding: 1rem;
-            background: rgba(253, 121, 168, 0.1);
-            border-radius: 12px;
-            border: 1px solid rgba(253, 121, 168, 0.3);
-        }
-
-        .form-section {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 3rem;
-            margin: 2rem 0;
-            box-shadow: 0 20px 60px rgba(108, 92, 231, 0.2);
-            border: 1px solid rgba(108, 92, 231, 0.2);
-        }
-
-        .form-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: var(--secondary);
-        }
-
-        .form-description { color: var(--text-muted); margin-bottom: 2rem; }
-
-        .form-group { margin-bottom: 1.5rem; }
-
-        .form-label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
-
-        .form-input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid rgba(108, 92, 231, 0.3);
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.2);
-        }
-
-        .form-input::placeholder { color: var(--text-muted); }
-
-        .btn-primary {
-            width: 100%;
-            padding: 1.25rem 2rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
-        }
-
-        .success-message { display: none; text-align: center; padding: 2rem; }
-        .success-message.show { display: block; }
-        .success-emoji { font-size: 4rem; margin-bottom: 1rem; }
-        .success-title { font-size: 1.5rem; font-weight: 700; color: var(--secondary); margin-bottom: 0.5rem; }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 3rem 0;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid rgba(108, 92, 231, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .feature-emoji { font-size: 2.5rem; margin-bottom: 1rem; }
-        .feature-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .feature-description { font-size: 0.9rem; color: var(--text-muted); }
-
-        .emotional-section {
-            background: linear-gradient(135deg, rgba(108, 92, 231, 0.1) 0%, rgba(0, 206, 201, 0.1) 100%);
-            border-radius: 24px;
-            padding: 3rem;
-            margin: 3rem 0;
-            text-align: center;
-            border: 1px solid rgba(108, 92, 231, 0.2);
-        }
-
-        .emotional-section h2 { font-size: 1.8rem; margin-bottom: 1.5rem; }
-
-        .emotions-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .emotion-tag {
-            background: var(--bg-card);
-            padding: 0.75rem 1.25rem;
-            border-radius: 50px;
-            font-weight: 600;
-            border: 1px solid rgba(108, 92, 231, 0.3);
-        }
-
-        .footer { text-align: center; padding: 3rem 0; color: var(--text-muted); font-size: 0.9rem; }
-        .footer-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
-
-        .error-message { color: #FF6B6B; font-size: 0.9rem; margin-top: 0.5rem; display: none; }
-        .error-message.show { display: block; }
-
-        @media (max-width: 600px) {
-            .container { padding: 1rem; }
-            .hero h1 { font-size: 1.8rem; }
-            .hero-subtitle { font-size: 1.1rem; }
-            .form-section { padding: 1.5rem; }
-        }
-    </style>
+    <title>Emociones Mascotas</title>
+    <link rel="stylesheet" href="./static/css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <section class="hero">
-            <div class="hero-emoji">🐾</div>
-            <h1>Emociones Mascotas</h1>
-            <p class="hero-subtitle">
-                Aprende a descifrar el mundo emocional de tu compañero peludo y fortalece el vínculo que comparten.
-            </p>
-            <div class="hero-question">
-                ¿Qué es lo que realmente siente tu mascota?
+        <header class="header">
+            <h1><span>🐾</span> Emociones Mascotas</h1>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('mascotas')">🐶 Mascotas</button>
+                <button class="nav-tab" onclick="showSection('emociones')">💭 Emociones</button>
+                <button class="nav-tab" onclick="showSection('estadisticas')">📊 Estadísticas</button>
+            </nav>
+        </header>
+
+        <!-- Sección Mascotas -->
+        <section id="section-mascotas" class="fade-in">
+            <div class="grid-2 mb-3">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-mascotas">0</div>
+                    <div class="stat-label">Total de Mascotas</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #00cec9 0%, #0984e3 100%);">
+                    <div class="stat-value" id="total-emociones">0</div>
+                    <div class="stat-label">Emociones Registradas</div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="card-title">🐾 Mis Mascotas</h2>
+                    <button class="btn btn-primary" onclick="openMascotaModal()">
+                        ➕ Nueva Mascota
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="search-mascotas" placeholder="Buscar mascotas..." oninput="filtrarMascotas()">
+                </div>
+                <div class="table-container">
+                    <table id="mascotas-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Especie</th>
+                                <th>Raza</th>
+                                <th>Emociones</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mascotas-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="mascotas-empty" style="display: none;">
+                    <span>🐾</span>
+                    <h3>No tienes mascotas registradas</h3>
+                    <p>¡Comienza agregando a tu primera mascota!</p>
+                </div>
             </div>
         </section>
 
-        <section class="form-section">
-            <h2 class="form-title">🌟 Únete a nuestra comunidad</h2>
-            <p class="form-description">Recibe guía personalizada para entender las emociones de tu mejor amigo.</p>
-
-            <form id="lead-form">
-                <div class="form-group">
-                    <label class="form-label" for="nombre">Tu nombre</label>
-                    <input type="text" id="nombre" name="nombre" class="form-input" placeholder="¿Cómo te llamas?" required>
+        <!-- Sección Emociones -->
+        <section id="section-emociones" class="fade-in" style="display: none;">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="card-title">💭 Registrar Nueva Emoción</h2>
                 </div>
+                <form id="emocion-form" onsubmit="registrarEmocion(event)">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="emocion-mascota">Mascota</label>
+                            <select class="form-control" id="emocion-mascota" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="emocion-tipo">Tipo de Emoción</label>
+                            <select class="form-control" id="emocion-tipo" required>
+                                <option value="">Selecciona una emoción</option>
+                                <option value="feliz">😊 Feliz</option>
+                                <option value="triste">😢 Triste</option>
+                                <option value="ansioso">😰 Ansioso</option>
+                                <option value="tranquilo">😌 Tranquilo</option>
+                                <option value="juguetón">🎾 Juguetón</option>
+                                <option value="asustado">😨 Asustado</option>
+                                <option value="enfermizo">🤒 Enfermizo</option>
+                                <option value="cansado">😴 Cansado</option>
+                                <option value="excitado">🤩 Excitado</option>
+                                <option value="confundido">😕 Confundido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="emocion-intensidad">Intensidad (1-5)</label>
+                            <div class="intensidad-indicator" id="intensidad-selector">
+                                <div class="intensidad-dot active" data-value="1"></div>
+                                <div class="intensidad-dot active" data-value="2"></div>
+                                <div class="intensidad-dot" data-value="3"></div>
+                                <div class="intensidad-dot" data-value="4"></div>
+                                <div class="intensidad-dot" data-value="5"></div>
+                            </div>
+                            <input type="hidden" id="emocion-intensidad" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label for="emocion-contexto">Contexto</label>
+                            <select class="form-control" id="emocion-contexto">
+                                <option value="">Selecciona contexto</option>
+                                <option value="comida">🍖 Comida</option>
+                                <option value="paseo">🚶 Paseo</option>
+                                <option value="juego">🎾 Juego</option>
+                                <option value="descanso">😴 Descanso</option>
+                                <option value="visita_veterinario">🏥 Visita al Veterinario</option>
+                                <option value="socializacion">🐕 Socialización</option>
+                                <option value="sin_motivo_aparente">❓ Sin motivo aparente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="emocion-descripcion">Descripción (opcional)</label>
+                        <textarea class="form-control" id="emocion-descripcion" rows="3" placeholder="Describe cómo se comporta tu mascota..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">💾 Registrar Emoción</button>
+                </form>
+            </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="email">Tu correo electrónico</label>
-                    <input type="email" id="email" name="email" class="form-input" placeholder="tu@correo.com" required>
-                    <p class="error-message" id="email-error">Por favor ingresa un correo válido</p>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📝 Historial de Emociones</h2>
+                    <div class="flex gap-1">
+                        <select class="form-control" id="filtro-mascota" onchange="cargarEmociones()">
+                            <option value="">Todas las mascotas</option>
+                        </select>
+                    </div>
                 </div>
+                <div class="search-bar">
+                    <input type="text" id="search-emociones" placeholder="Buscar en historial..." oninput="filtrarEmociones()">
+                </div>
+                <div class="table-container">
+                    <table id="emociones-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Mascota</th>
+                                <th>Emoción</th>
+                                <th>Intensidad</th>
+                                <th>Contexto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="emociones-tbody"></tbody>
+                    </table>
+                </div>
+                <div class="empty-state" id="emociones-empty" style="display: none;">
+                    <span>💭</span>
+                    <h3>No hay emociones registradas</h3>
+                    <p>¡Registra la primera emoción de tu mascota!</p>
+                </div>
+            </div>
+        </section>
 
-                <button type="submit" class="btn-primary" id="submit-btn">
-                    Descubrir las emociones de mi mascota 🐾
-                </button>
+        <!-- Sección Estadísticas -->
+        <section id="section-estadisticas" class="fade-in" style="display: none;">
+            <div class="grid-2 mb-3">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total-emociones">0</div>
+                    <div class="stat-label">Total de Emociones</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">
+                    <div class="stat-value" id="stat-emocion-frecuente">-</div>
+                    <div class="stat-label">Emoción Más Frecuente</div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📊 Distribución de Emociones</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chart-emociones"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">📈 Emociones Promedio</h2>
+                    </div>
+                    <div id="stats-list"></div>
+                </div>
+            </div>
+
+            <div class="card mt-2">
+                <div class="card-header">
+                    <h2 class="card-title">🐾 Emociones por Mascota</h2>
+                    <select class="form-control" id="stats-mascota-select" onchange="cargarStatsMascota()">
+                        <option value="">Selecciona una mascota</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-mascota"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Captura de Prospectos -->
+        <div class="caja-captura" style="background: white; padding: 30px; border-radius: 16px; max-width: 560px; margin: 40px auto; border: 2px solid #7a9e7e; box-shadow: 0 4px 20px rgba(107,79,58,0.08); text-align: center;">
+            <h3 style="color: #6b4f3a; margin-bottom: 12px; font-size: 1.3rem;">🐾 ¿Qué es lo que realmente siente tu mascota?</h3>
+            <p style="color: #5a5a5a; font-size: 0.9rem; margin-bottom: 20px; font-family: Arial, sans-serif;">Descubre el lenguaje secreto de sus emociones. Invierte en el conocimiento definitivo para comprender su corazón y transformar su bienestar.</p>
+            
+            <form id="lead-form" style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" name="nombre" placeholder="Tu nombre completo" required style="padding: 12px; border: 1px solid #e8e0d4; border-radius: 8px; font-size: 0.9rem; font-family: Arial, sans-serif;">
+                <input type="email" name="correo" placeholder="tucorreo@email.com" required style="padding: 12px; border: 1px solid #e8e0d4; border-radius: 8px; font-size: 0.9rem; font-family: Arial, sans-serif;">
+                <button type="submit" style="background: #7a9e7e; color: white; border: none; padding: 14px; border-radius: 25px; font-size: 0.95rem; font-weight: bold; cursor: pointer; font-family: Arial, sans-serif; transition: background 0.2s;">Quiero Entender a Mi Mascota</button>
             </form>
+            <p id="lead-success" style="display: none; color: #7a9e7e; font-weight: bold; margin-top: 15px;">¡Gracias! Te contactaremos pronto. 💜</p>
+        </div>
 
-            <div class="success-message" id="success-message">
-                <div class="success-emoji">💜</div>
-                <h3 class="success-title">¡Gracias por unirte!</h3>
-                <p>Te enviaremos consejos para conectar emocionalmente con tu mascota.</p>
-            </div>
-        </section>
-
-        <section class="features">
-            <div class="feature-card">
-                <div class="feature-emoji">💭</div>
-                <h3 class="feature-title">Descifra sus emociones</h3>
-                <p class="feature-description">Aprende a reconocer cuándo tu mascota está feliz, triste, ansiosa o necesita atención.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-emoji">❤️</div>
-                <h3 class="feature-title">Fortalece el vínculo</h3>
-                <p class="feature-description">Una conexión emocional profunda transforma la vida de ambos.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-emoji">🎯</div>
-                <h3 class="feature-title">Cuidado personalizado</h3>
-                <p class="feature-description">Cada mascota es única. Descubre cómo responder a sus necesidades emocionales.</p>
-            </div>
-        </section>
-
-        <section class="emotional-section">
-            <h2>Las emociones que puedes aprender a identificar</h2>
-            <p>Tu mascota siente más de lo que imaginas. Conocer sus emociones te permite cuidarla mejor.</p>
-            <div class="emotions-list">
-                <span class="emotion-tag">😊 Felicidad</span>
-                <span class="emotion-tag">😢 Tristeza</span>
-                <span class="emotion-tag">😰 Ansiedad</span>
-                <span class="emotion-tag">😌 Calma</span>
-                <span class="emotion-tag">🎾 Juega</span>
-                <span class="emotion-tag">😨 Miedo</span>
-                <span class="emotion-tag">🤩 Emoción</span>
-                <span class="emotion-tag">😕 Confusión</span>
-            </div>
-        </section>
-
-        <footer class="footer">
-            <div class="footer-emoji">🐕 🐈</div>
-            <p>Porque entender a tu mascota es amarla mejor.</p>
-        </footer>
     </div>
 
+    <!-- Modal Mascota -->
+    <div class="modal-overlay" id="mascota-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="mascota-modal-title">🐾 Nueva Mascota</h3>
+                <button class="modal-close" onclick="closeMascotaModal()">&times;</button>
+            </div>
+            <form id="mascota-form" onsubmit="guardarMascota(event)">
+                <input type="hidden" id="mascota-id">
+                <div class="form-group">
+                    <label for="mascota-nombre">Nombre *</label>
+                    <input type="text" class="form-control" id="mascota-nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="mascota-especie">Especie *</label>
+                    <select class="form-control" id="mascota-especie" required>
+                        <option value="">Selecciona especie</option>
+                        <option value="perro">🐕 Perro</option>
+                        <option value="gato">🐈 Gato</option>
+                        <option value="ave">🐦 Ave</option>
+                        <option value="conejo">🐰 Conejo</option>
+                        <option value="hamster">🐹 Hámster</option>
+                        <option value="pez">🐟 Pez</option>
+                        <option value="reptil">🦎 Reptil</option>
+                        <option value="otro">🐾 Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="mascota-raza">Raza</label>
+                    <input type="text" class="form-control" id="mascota-raza" placeholder="Ej: Golden Retriever">
+                </div>
+                <div class="form-group">
+                    <label for="mascota-fecha">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="mascota-fecha">
+                </div>
+                <div class="form-group">
+                    <label for="mascota-notas">Notas</label>
+                    <textarea class="form-control" id="mascota-notas" rows="3" placeholder="Notas sobre tu mascota..."></textarea>
+                </div>
+                <div class="flex gap-1 justify-between">
+                    <button type="button" class="btn btn-danger" onclick="confirmDeleteMascota()">🗑️ Eliminar</button>
+                    <button type="submit" class="btn btn-primary">💾 Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="./static/js/app.js"></script>
+    
     <script>
+        // Handler para el formulario de captura de prospectos
+        const leadForm = document.getElementById('lead-form');
+        const leadSuccess = document.getElementById('lead-success');
         const WEBHOOK_URL = 'https://eo8ouwhkkekinme.m.pipedream.net';
-        const form = document.getElementById('lead-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const successMessage = document.getElementById('success-message');
-        const emailInput = document.getElementById('email');
-        const emailError = document.getElementById('email-error');
 
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const nombre = document.getElementById('nombre').value.trim();
-            const email = emailInput.value.trim();
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                emailError.classList.add('show');
-                emailInput.style.borderColor = '#FF6B6B';
-                return;
-            }
-
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Enviando...';
-
-            try {
-                await fetch(WEBHOOK_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        nombre: nombre,
-                        email: email,
-                        fuente: 'landing_emociones_mascotas',
-                        timestamp: new Date().toISOString(),
-                        mensaje: `Lead: ${nombre} (${email})`
-                    })
-                });
-            } catch (error) {
-                console.log('Webhook error (continuando...)');
-            }
-
-            form.style.display = 'none';
-            successMessage.classList.add('show');
-            submitBtn.classList.remove('loading');
-        });
-
-        emailInput.addEventListener('input', function() {
-            emailError.classList.remove('show');
-            emailInput.style.borderColor = '';
-        });
+        if (leadForm) {
+            leadForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const nombre = leadForm.querySelector('input[name="nombre"]').value.trim();
+                const correo = leadForm.querySelector('input[name="correo"]').value.trim();
+                
+                const payload = {
+                    nombre: nombre,
+                    email: correo,
+                    fuente: 'landing_emociones_mascotas',
+                    timestamp: new Date().toISOString(),
+                    mensaje: `Lead: ${nombre} (${correo}) - Quiere entender las emociones de su mascota`
+                };
+                
+                try {
+                    await fetch(WEBHOOK_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                } catch (error) {
+                    console.log('Webhook envíado');
+                }
+                
+                // Mostrar mensaje de éxito
+                leadForm.style.display = 'none';
+                leadSuccess.style.display = 'block';
+            });
+        }
     </script>
 </body>
 </html>
