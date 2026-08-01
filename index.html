@@ -186,16 +186,46 @@
 </section>
 
 
-<!-- CAJA DE CAPTURA CON EL GANCHO EMOCIONAL Y WEBHOOK DE PIPEDREAM -->
+<!-- CAJA DE CAPTURA CON AJAX Y REDIRECCIÓN AUTOMÁTICA A LA APP -->
 <div class="caja-captura">
   <h3>🐾 ¿Qué es lo que realmente siente tu mascota?</h3>
   <p>Descubre el lenguaje secreto de sus emociones. Invierte en el conocimiento definitivo para comprender su corazón y transformar su bienestar.</p>
-  <form action="https://eo8ouwhkkekinme.m.pipedream.net" method="POST">
-    <input type="text" name="nombre" placeholder="Tu nombre completo" required>
-    <input type="email" name="correo" placeholder="tucorreo@email.com" required>
-    <button type="submit">Quiero Entender a Mi Mascota</button>
+  
+  <form id="leadForm">
+    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+    <input type="email" id="correo" name="correo" placeholder="tucorreo@email.com" required>
+    <button type="submit" id="btnEnviar">Quiero Entender a Mi Mascota</button>
   </form>
 </div>
+
+<script>
+  document.getElementById('leadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    var btn = document.getElementById('btnEnviar');
+    btn.textContent = "Procesando...";
+    btn.disabled = true;
+
+    var datos = {
+      nombre: document.getElementById('nombre').value,
+      correo: document.getElementById('correo').value,
+      fuente: "Landing Page Emociones Mascotas",
+      marca_de_tiempo: new Date().toISOString()
+    };
+
+    fetch('https://eo8ouwhkkekinme.m.pipedream.net', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(datos)
+    }).catch(err => console.log('Error enviando webhook:', err));
+
+    setTimeout(function() {
+      window.location.href = './app/';
+    }, 800);
+  });
+</script>
 
 
 <hr class="divider">
