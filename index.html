@@ -186,8 +186,8 @@
 </section>
 
 
-<!-- CAJA DE CAPTURA CON AJAX Y REDIRECCIÓN AUTOMÁTICA A LA APP -->
-<div class="caja-captura">
+<!-- CAJA DE CAPTURA CON MENSAJE DE ÉXITO INTEGRADO -->
+<div class="caja-captura" id="cajaCaptura">
   <h3>🐾 ¿Qué es lo que realmente siente tu mascota?</h3>
   <p>Descubre el lenguaje secreto de sus emociones. Invierte en el conocimiento definitivo para comprender su corazón y transformar su bienestar.</p>
   
@@ -196,6 +196,12 @@
     <input type="email" id="correo" name="correo" placeholder="tucorreo@email.com" required>
     <button type="submit" id="btnEnviar">Quiero Entender a Mi Mascota</button>
   </form>
+</div>
+
+<!-- MENSAJE DE ÉXITO (Oculto al inicio) -->
+<div id="mensajeExito" style="display: none; text-align: center; padding: 20px; background: #eef9f0; border-radius: 8px; border: 1px solid #a3d9a5;">
+  <h3 style="color: #2b7a35; margin-bottom: 10px;">¡Excelente, ya estás a un paso! 🐾</h3>
+  <p style="color: #333;">Tus datos se han registrado correctamente. Ya puedes explorar nuestras guías y recursos exclusivos arriba en el menú.</p>
 </div>
 
 <script>
@@ -213,6 +219,7 @@
       marca_de_tiempo: new Date().toISOString()
     };
 
+    // Envío silencioso a Pipedream por detrás
     fetch('https://eo8ouwhkkekinme.m.pipedream.net', {
       method: 'POST',
       headers: {
@@ -221,9 +228,11 @@
       body: JSON.stringify(datos)
     }).catch(err => console.log('Error enviando webhook:', err));
 
+    // Oculta el formulario y muestra el mensaje de éxito de forma limpia en la misma pantalla
     setTimeout(function() {
-      window.location.href = './app/';
-    }, 800);
+      document.getElementById('cajaCaptura').style.display = 'none';
+      document.getElementById('mensajeExito').style.display = 'block';
+    }, 600);
   });
 </script>
 
